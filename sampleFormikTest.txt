@@ -1,0 +1,254 @@
+import React from "react";
+import * as Yup from "yup";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import { useNavigate, Link } from "react-router-dom";
+
+const RegisterForm = () => {
+  const initialValues = {
+    userName: "",
+    phone: undefined,
+    age: undefined,
+    email: "",
+    password: "",
+  };
+
+  const validationSchema = Yup.object().shape({
+    userName: Yup.string().trim().required("User Name is required"),
+    phone: Yup.number().required("Phone is required"),
+    age: Yup.number().required("Age is required"),
+    email: Yup.string().trim().email("Not a valid email address").required("Email is required"),
+    password: Yup.string().required("Password is required"),
+  });
+
+  const navigate = useNavigate();
+
+  const handleSubmit = (formValue) => {
+    console.log(formValue);
+    navigate("/login");
+  };
+
+  return (
+    <>
+      <h3>Register Here</h3>
+      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
+        {({ errors, touched, isValid, dirty }) => (
+          <Form>
+            <div>
+              <label htmlFor="userName">User Name</label>
+              <br />
+              <Field id="userName" type="text" name="userName" autoComplete="off" />
+              <ErrorMessage name="userName">
+                {(msg) => (
+                  <div data-testid="username-error" style={{ color: "red" }}>
+                    {msg}
+                  </div>
+                )}
+              </ErrorMessage>
+            </div>
+            <div>
+              <label htmlFor="phone">Phone</label>
+              <br />
+              <Field id="phone" type="number" name="phone" autoComplete="off" />
+              <ErrorMessage name="phone">
+                {(msg) => (
+                  <div data-testid="phone-error" style={{ color: "red" }}>
+                    {msg}
+                  </div>
+                )}
+              </ErrorMessage>
+            </div>
+            <div>
+              <label htmlFor="age">Age</label>
+              <br />
+              <Field id="age" type="number" name="age" autoComplete="off" />
+              <ErrorMessage name="age">
+                {(msg) => (
+                  <div data-testid="age-error" style={{ color: "red" }}>
+                    {msg}
+                  </div>
+                )}
+              </ErrorMessage>
+            </div>
+            <div>
+              <label htmlFor="email">Email</label>
+              <br />
+              <Field id="email" type="text" name="email" autoComplete="off" />
+              <ErrorMessage name="email">
+                {(msg) => (
+                  <div data-testid="email-error" style={{ color: "red" }}>
+                    {msg}
+                  </div>
+                )}
+              </ErrorMessage>
+            </div>
+            <div>
+              <label htmlFor="password">Password</label>
+              <br />
+              <Field id="password" type="password" name="password" autoComplete="off" />
+              <ErrorMessage name="password">
+                {(msg) => (
+                  <div data-testid="password-error" style={{ color: "red" }}>
+                    {msg}
+                  </div>
+                )}
+              </ErrorMessage>
+            </div>
+            <br />
+            <div>
+              <button type="submit" data-testid="register-button">
+                Register
+              </button>
+            </div>
+            <div style={{ marginTop: "10px" }}>
+              <p>Already have an account?</p>
+              <Link to="/login">
+                <button>Click Here</button>
+              </Link>
+            </div>
+          </Form>
+        )}
+      </Formik>
+    </>
+  );
+};
+
+export default RegisterForm;
+
+------------------------------------------------
+
+import { screen, render, fireEvent } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
+import RegisterForm from "./RegisterForm";
+
+describe("tests on register form component", () => {
+  test("to check whether component is present", () => {
+    render(
+      <MemoryRouter>
+        <RegisterForm />
+      </MemoryRouter>
+    );
+  });
+
+  test("to check on header", () => {
+    render(
+      <MemoryRouter>
+        <RegisterForm />
+      </MemoryRouter>
+    );
+
+    const header = screen.getByText("Register Here");
+    expect(header).toBeInTheDocument();
+  });
+
+  test("to check whether all the fields are initially empty", () => {
+    render(
+      <MemoryRouter>
+        <RegisterForm />
+      </MemoryRouter>
+    );
+
+    const userName = screen.getByLabelText("User Name");
+    const phone = screen.getByLabelText("Phone");
+    const age = screen.getByLabelText("Age");
+    const email = screen.getByLabelText("Email");
+    const password = screen.getByLabelText("Password");
+
+    expect(userName).toBeInTheDocument();
+    expect(phone).toBeInTheDocument();
+    expect(age).toBeInTheDocument();
+    expect(email).toBeInTheDocument();
+    expect(password).toBeInTheDocument();
+  });
+
+  test("to check whether all the fields take values", () => {
+    render(
+      <MemoryRouter>
+        <RegisterForm />
+      </MemoryRouter>
+    );
+
+    const userName = screen.getByLabelText("User Name");
+    const phone = screen.getByLabelText("Phone");
+    const age = screen.getByLabelText("Age");
+    const email = screen.getByLabelText("Email");
+    const password = screen.getByLabelText("Password");
+
+    fireEvent.change(userName, { target: { value: "raveesh" } });
+    fireEvent.change(phone, { target: { value: 9898989898 } });
+    fireEvent.change(age, { target: { value: 22 } });
+    fireEvent.change(email, { target: { value: "raveesh@gmail.com" } });
+    fireEvent.change(password, { target: { value: "Testing!@34" } });
+
+    expect(userName).toHaveValue("raveesh");
+    expect(phone).toHaveValue(9898989898);
+    expect(age).toHaveValue(22);
+    expect(email).toHaveValue();
+    expect(password).toHaveValue("Testing!@34");
+  });
+
+  test("to check whether error messages are displayed when fields are empty and clicked on login button", async () => {
+    const handleSubmit = jest.fn();
+
+    render(
+      <MemoryRouter>
+        <RegisterForm onSubmit={handleSubmit} />
+      </MemoryRouter>
+    );
+
+    const userName = screen.getByLabelText("User Name");
+    const phone = screen.getByLabelText("Phone");
+    const age = screen.getByLabelText("Age");
+    const email = screen.getByLabelText("Email");
+    const password = screen.getByLabelText("Password");
+
+    // Call blur without emailting anything which should trigger a validation error
+    fireEvent.blur(userName);
+    fireEvent.blur(phone);
+    fireEvent.blur(age);
+    fireEvent.blur(email);
+    fireEvent.blur(password);
+
+    const userNameError = await screen.findByTestId(/username-error/i);
+    const phoneError = await screen.findByTestId(/phone-error/i);
+    const ageError = await screen.findByTestId(/age-error/i);
+    const emailError = await screen.findByTestId(/email-error/i);
+    const passwordError = await screen.findByTestId(/password-error/i);
+
+    expect(userNameError.innerHTML).toBe("User Name is required");
+    expect(phoneError.innerHTML).toBe("Phone is required");
+    expect(ageError.innerHTML).toBe("Age is required");
+    expect(emailError.innerHTML).toBe("Email is required");
+    expect(passwordError.innerHTML).toBe("Password is required");
+  });
+
+  test("to check whether all the fields take values and click on register button", () => {
+    const handleSubmit = jest.fn();
+
+    render(
+      <MemoryRouter>
+        <RegisterForm onSubmit={handleSubmit} />
+      </MemoryRouter>
+    );
+
+    const userName = screen.getByLabelText("User Name");
+    const phone = screen.getByLabelText("Phone");
+    const age = screen.getByLabelText("Age");
+    const email = screen.getByLabelText("Email");
+    const password = screen.getByLabelText("Password");
+    const button = screen.getByTestId("register-button");
+
+    fireEvent.change(userName, { target: { value: "raveesh" } });
+    fireEvent.change(phone, { target: { value: 9898989898 } });
+    fireEvent.change(age, { target: { value: 22 } });
+    fireEvent.change(email, { target: { value: "raveesh@gmail.com" } });
+    fireEvent.change(password, { target: { value: "Testing!@34" } });
+
+    expect(userName).toHaveValue("raveesh");
+    expect(phone).toHaveValue(9898989898);
+    expect(age).toHaveValue(22);
+    expect(email).toHaveValue();
+    expect(password).toHaveValue("Testing!@34");
+
+    fireEvent.click(button);
+  });
+});
