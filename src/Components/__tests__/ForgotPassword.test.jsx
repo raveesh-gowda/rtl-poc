@@ -28,7 +28,9 @@ describe("testing on forgot password component", () => {
 	test("to check on the paragraph tag", () => {
 		renderComponent();
 
-		const paragraph = screen.getByText("Enter you Email ID, we will send you a link to change your password.");
+		const paragraph = screen.getByText(
+			"Enter you Email ID, we will send you a link to change your password."
+		);
 		expect(paragraph).toBeInTheDocument();
 	});
 

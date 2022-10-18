@@ -12,16 +12,20 @@ import Login from "../Login";
 
 // setting up server
 const server = setupServer(
-	rest.post("apiUrl/login", [{ email: "raveesh@gmail.com", password: "Testing!@34" }], (req, res, ctx) => {
-		return res(
-			ctx.status(200),
-			ctx.json({
-				token: "abdb23231232jdsaWEDwdxaCDA",
-				message: "Successfully logged in",
-				status: "SUCCESS",
-			})
-		);
-	})
+	rest.post(
+		"apiUrl/login",
+		[{ email: "raveesh@gmail.com", password: "Testing!@34" }],
+		(req, res, ctx) => {
+			return res(
+				ctx.status(200),
+				ctx.json({
+					token: "abdb23231232jdsaWEDwdxaCDA",
+					message: "Successfully logged in",
+					status: "SUCCESS",
+				})
+			);
+		}
+	)
 );
 
 // establish API mocking before all tests
@@ -57,15 +61,19 @@ describe("tests on mocking login api url", () => {
 	test("check on sending invalid credentials for login", async () => {
 		server.use(
 			// override the initial request handler and reuse the server
-			rest.post("apiUrl/login", [{ email: "raveesh@gmail.com", password: "Testing!@34" }], (req, res, ctx) => {
-				return res(
-					ctx.status(401),
-					ctx.json({
-						message: "Invalid email/ password",
-						status: "ERROR",
-					})
-				);
-			})
+			rest.post(
+				"apiUrl/login",
+				[{ email: "raveesh@gmail.com", password: "Testing!@34" }],
+				(req, res, ctx) => {
+					return res(
+						ctx.status(401),
+						ctx.json({
+							message: "Invalid email/ password",
+							status: "ERROR",
+						})
+					);
+				}
+			)
 		);
 
 		render(<Login />);
