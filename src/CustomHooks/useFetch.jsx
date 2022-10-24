@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useToasts } from "react-toast-notifications";
 
@@ -8,7 +8,7 @@ export const useFetch = (url) => {
 
 	const { addToast } = useToasts();
 
-	const getData = async () => {
+	const getData = useCallback(async () => {
 		await axios
 			.get(url)
 			.then((response) => {
@@ -22,14 +22,14 @@ export const useFetch = (url) => {
 					autoDismissTimeout: 1000 * 3,
 				})
 			);
-	};
+	}, [addToast, url]);
 
 	useEffect(() => {
 		getData();
-   }, [ url ]);
-   
-   const addData = async (formData) => {
-      axios
+	}, [getData, url]);
+
+	const addData = async (formData) => {
+		axios
 			.post(url, formData)
 			.then((res) => {
 				setData([res.data, ...data]);
@@ -46,10 +46,10 @@ export const useFetch = (url) => {
 					autoDismissTimeout: 1000 * 3,
 				})
 			);
-   }
+	};
 
-   const updateData = async (formData) => {
-      axios
+	const updateData = async (formData) => {
+		axios
 			.put(`${url}/${formData.id}`, formData)
 			.then((response) => {
 				const result = data.map((ele) => {
@@ -73,7 +73,7 @@ export const useFetch = (url) => {
 					autoDismissTimeout: 1000 * 3,
 				})
 			);
-   }
+	};
 
-	return { loading, data, addData , updateData};
+	return { loading, data, addData, updateData };
 };
