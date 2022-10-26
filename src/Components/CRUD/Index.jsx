@@ -36,7 +36,7 @@ const Index = () => {
 			<Button size="md" className="m-3" onClick={() => toggleUserModal(true, "create", {})}>
 				Create Post
 			</Button>
-			<Suspense fallback={<h5>Loading...</h5>}>
+			<Suspense fallback={loading && <h5>Loading...</h5>}>
 				<List data={data} columns={columns} handleView={handleView} />
 			</Suspense>
 			<AddEditModal
