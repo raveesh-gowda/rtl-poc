@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, lazy, Suspense } from "react";
 import { Button } from "react-bootstrap";
 
 import { url, columns } from "./constants";
-import List from "./List";
 import AddEditModal from "./AddEditModal";
 import { useFetch } from "../../CustomHooks/useFetch";
+
+const List = lazy(() => import("./List"));
 
 const Index = () => {
 	const { loading, data, addData, updateData } = useFetch(url);
@@ -35,11 +36,9 @@ const Index = () => {
 			<Button size="md" className="m-3" onClick={() => toggleUserModal(true, "create", {})}>
 				Create Post
 			</Button>
-			{loading ? (
-				<h5>Loading...</h5>
-			) : (
+			<Suspense fallback={<h5>Loading...</h5>}>
 				<List data={data} columns={columns} handleView={handleView} />
-			)}
+			</Suspense>
 			<AddEditModal
 				show={userData.show || false}
 				mode={userData.mode || "view"}
