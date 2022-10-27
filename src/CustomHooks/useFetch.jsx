@@ -9,19 +9,17 @@ export const useFetch = (url) => {
 	const { addToast } = useToasts();
 
 	const getData = useCallback(async () => {
-		await axios
-			.get(url)
-			.then((response) => {
-				setData(response.data);
-				setLoading(false);
-			})
-			.catch((err) =>
-				addToast(err.message, {
-					appearance: "error",
-					autoDismiss: true,
-					autoDismissTimeout: 1000 * 3,
-				})
-			);
+		try {
+			const { data } = await axios(url);
+			setData(data);
+			setLoading(false);
+		} catch (error) {
+			addToast(error.message, {
+				appearance: "error",
+				autoDismiss: true,
+				autoDismissTimeout: 1000 * 3,
+			});
+		}
 	}, [addToast, url]);
 
 	useEffect(() => {
@@ -29,50 +27,46 @@ export const useFetch = (url) => {
 	}, [getData, url]);
 
 	const addData = async (formData) => {
-		axios
-			.post(url, formData)
-			.then((res) => {
-				setData([res.data, ...data]);
-				addToast("Successfuly created!", {
-					appearance: "success",
-					autoDismiss: true,
-					autoDismissTimeout: 1000 * 3,
-				});
-			})
-			.catch((err) =>
-				addToast(err.message, {
-					appearance: "error",
-					autoDismiss: true,
-					autoDismissTimeout: 1000 * 3,
-				})
-			);
+		try {
+			const { data: result } = await axios.post(url, formData);
+			setData([result, ...data]);
+			addToast("Successfuly created!", {
+				appearance: "success",
+				autoDismiss: true,
+				autoDismissTimeout: 1000 * 3,
+			});
+		} catch (error) {
+			addToast(error.message, {
+				appearance: "error",
+				autoDismiss: true,
+				autoDismissTimeout: 1000 * 3,
+			});
+		}
 	};
 
 	const updateData = async (formData) => {
-		axios
-			.put(`${url}/${formData.id}`, formData)
-			.then((response) => {
-				const result = data.map((ele) => {
-					if (ele.id === response.data.id) {
-						return { ...response.data };
-					} else {
-						return { ...ele };
-					}
-				});
-				setData(result);
-				addToast("Successfuly updated!", {
-					appearance: "success",
-					autoDismiss: true,
-					autoDismissTimeout: 1000 * 3,
-				});
-			})
-			.catch((err) =>
-				addToast(err.message, {
-					appearance: "error",
-					autoDismiss: true,
-					autoDismissTimeout: 1000 * 3,
-				})
-			);
+		try {
+			const { data: result } = await axios.put(`${url}/${formData.id}`, formData);
+			const updatedData = data.map((ele) => {
+				if (ele.id === result.id) {
+					return { ...result };
+				} else {
+					return { ...ele };
+				}
+			});
+			setData(updatedData);
+			addToast("Successfuly updated!", {
+				appearance: "success",
+				autoDismiss: true,
+				autoDismissTimeout: 1000 * 3,
+			});
+		} catch (error) {
+			addToast(error.message, {
+				appearance: "error",
+				autoDismiss: true,
+				autoDismissTimeout: 1000 * 3,
+			});
+		}
 	};
 
 	return { loading, data, addData, updateData };
