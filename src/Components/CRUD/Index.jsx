@@ -3,7 +3,7 @@ import { Button } from "react-bootstrap";
 
 import { url, columns } from "./constants";
 import AddEditModal from "./AddEditModal";
-import { useFetch } from "../../CustomHooks/useFetch";
+import { useFetch } from "../../app/CustomHooks/useFetch";
 
 const List = lazy(() => import("./List"));
 
