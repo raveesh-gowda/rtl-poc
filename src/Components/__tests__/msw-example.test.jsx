@@ -3,7 +3,7 @@ import { rest } from "msw";
 import { setupServer } from "msw/node";
 
 // import react-testing methods
-import { render, screen, waitFor } from "@testing-library/react";
+import { screen, render, waitFor } from "../../app/utils/testUtils";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 

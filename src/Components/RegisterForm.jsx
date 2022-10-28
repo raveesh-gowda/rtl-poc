@@ -3,37 +3,58 @@ import { useNavigate, Link } from "react-router-dom";
 import { validateEmail, validatePassword } from "./validate";
 
 const RegisterForm = () => {
-	const [firstName, setFirstName] = React.useState("");
-	const [lastName, setLastName] = React.useState("");
-	const [address, setAddress] = React.useState("");
-	const [phone, setPhone] = useState("");
-	const [email, setEmail] = React.useState("");
-	const [password, setPassword] = React.useState("");
-	const [agree, setAgree] = React.useState(false);
+	const [registerInfo, setRegisterInfo] = useState({
+		firstName: "",
+		lastName: "",
+		address: "",
+		phone: "",
+		email: "",
+		password: "",
+		agree: false,
+	});
+
 	const [formErrors, setFormErrors] = React.useState({});
 	const errors = {};
 
 	const validations = () => {
-		if (firstName.trim().length === 0) {
+		if (registerInfo.firstName.trim().length === 0) {
 			errors.firstName = "First Name is required";
 		}
-		if (lastName.trim().length === 0) {
+		if (registerInfo.lastName.trim().length === 0) {
 			errors.lastName = "Last Name is required";
 		}
-		if (phone.trim().length === 0) {
+		if (registerInfo.phone.trim().length === 0) {
 			errors.phone = "Phone is required";
 		}
-		if (email.trim().length === 0) {
+		if (registerInfo.email.trim().length === 0) {
 			errors.email = "Email is required";
-		} else if (!validateEmail(email)) {
+		} else if (!validateEmail(registerInfo.email)) {
 			errors.email = "Invalid email format";
 		}
-		if (password.trim().length === 0) {
+		if (registerInfo.password.trim().length === 0) {
 			errors.password = "Password is required";
-		} else if (!validatePassword(password)) {
+		} else if (!validatePassword(registerInfo.password)) {
 			errors.password =
 				"Password must contain 8 or more characters with at least one of each: uppercase, lowercase, number and special";
 		}
+	};
+
+	const handleChange = (e) => {
+		const { name, value } = e.target;
+
+		setRegisterInfo({
+			...registerInfo,
+			[name]: value,
+		});
+	};
+
+	const handleCheckedChange = (e) => {
+		const { name, checked } = e.target;
+
+		setRegisterInfo({
+			...registerInfo,
+			[name]: checked,
+		});
 	};
 
 	const navigate = useNavigate();
@@ -41,6 +62,8 @@ const RegisterForm = () => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		validations();
+
+		const { firstName, lastName, address, phone, email, password, agree } = registerInfo;
 
 		if (Object.keys(errors).length === 0) {
 			setFormErrors({});
@@ -52,17 +75,21 @@ const RegisterForm = () => {
 				phone,
 				email,
 				password,
+				agree,
 			};
 
 			console.log(formData);
 			navigate("/login");
 
-			setFirstName("");
-			setLastName("");
-			setAddress("");
-			setPhone("");
-			setEmail("");
-			setPassword("");
+			setRegisterInfo({
+				firstName: "",
+				lastName: "",
+				address: "",
+				phone: "",
+				email: "",
+				password: "",
+				agree: false,
+			});
 		} else {
 			setFormErrors(errors);
 		}
@@ -77,13 +104,11 @@ const RegisterForm = () => {
 				<input
 					id="register-firstname"
 					type="text"
-					value={firstName}
-					onChange={(e) => {
-						setFirstName(e.target.value);
-					}}
+					value={registerInfo.firstName}
 					name="firstName"
 					placeholder="First Name"
 					autoComplete="off"
+					onChange={(e) => handleChange(e)}
 				/>
 				{formErrors.firstName && <span style={{ color: "red" }}>{formErrors.firstName}</span>}
 				<br />
@@ -92,13 +117,11 @@ const RegisterForm = () => {
 				<input
 					id="register-lastname"
 					type="text"
-					value={lastName}
-					onChange={(e) => {
-						setLastName(e.target.value);
-					}}
+					value={registerInfo.lastName}
 					name="lastName"
 					placeholder="Last Name"
 					autoComplete="off"
+					onChange={(e) => handleChange(e)}
 				/>
 				{formErrors.lastName && <span style={{ color: "red" }}>{formErrors.lastName}</span>}
 				<br />
@@ -107,13 +130,11 @@ const RegisterForm = () => {
 				<textarea
 					id="register-address"
 					type="text"
-					value={address}
-					onChange={(e) => {
-						setAddress(e.target.value);
-					}}
+					value={registerInfo.address}
 					name="address"
 					placeholder="Address"
 					autoComplete="off"
+					onChange={(e) => handleChange(e)}
 				/>
 				<br />
 				<label htmlFor="register-phone">Phone</label>
@@ -121,13 +142,11 @@ const RegisterForm = () => {
 				<input
 					id="register-phone"
 					type="text"
-					value={phone}
-					onChange={(e) => {
-						setPhone(e.target.value);
-					}}
+					value={registerInfo.phone}
 					name="phone"
 					placeholder="Phone"
 					autoComplete="off"
+					onChange={(e) => handleChange(e)}
 				/>
 				{formErrors.phone && <span style={{ color: "red" }}>{formErrors.phone}</span>}
 				<br />
@@ -136,13 +155,11 @@ const RegisterForm = () => {
 				<input
 					id="login-email"
 					type="text"
-					value={email}
-					onChange={(e) => {
-						setEmail(e.target.value);
-					}}
+					value={registerInfo.email}
 					name="email"
 					placeholder="Email"
 					autoComplete="off"
+					onChange={(e) => handleChange(e)}
 				/>
 				{formErrors.email && <span style={{ color: "red" }}>{formErrors.email}</span>}
 				<br />
@@ -151,29 +168,25 @@ const RegisterForm = () => {
 				<input
 					id="login-password"
 					type="password"
-					value={password}
-					onChange={(e) => {
-						setPassword(e.target.value);
-					}}
+					value={registerInfo.password}
 					name="password"
 					placeholder="Password"
 					autoComplete="off"
+					onChange={(e) => handleChange(e)}
 				/>
 				{formErrors.password && <span style={{ color: "red" }}>{formErrors.password}</span>}
 				<br />
 				<input
 					id="agree"
 					type="checkbox"
-					value={agree}
-					checked={agree}
-					onChange={(e) => {
-						setAgree(e.target.checked);
-					}}
+					value={registerInfo.agree}
+					checked={registerInfo.agree}
 					name="agree"
+					onChange={(e) => handleCheckedChange(e)}
 				/>
 				<label htmlFor="agree">I Agree to terms and conditions.</label>
 				<br />
-				<input type="submit" value="Register" disabled={!agree} />
+				<input type="submit" value="Register" disabled={!registerInfo.agree} />
 			</form>
 			<div style={{ marginTop: "10px" }}>
 				<p>Already have an account?</p>
