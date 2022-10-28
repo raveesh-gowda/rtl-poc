@@ -1,23 +1,31 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { validateEmail } from "./validate";
 
 const ForgotPassword = () => {
-	const [email, setEmail] = useState("");
+	const [forgotPasswordInfo, setForgotPasswordInfo] = useState({ email: "" });
 	const [formErrors, setFormErrors] = useState({});
 	const errors = {};
 
 	const navigate = useNavigate();
 
 	const validations = () => {
-		if (!validateEmail(email)) {
+		if (!validateEmail(forgotPasswordInfo.email)) {
 			errors.email = "Invalid email format";
 		}
+	};
+
+	const handleChange = (e) => {
+		const { name, value } = e.target;
+
+		setForgotPasswordInfo({ ...forgotPasswordInfo, [name]: value });
 	};
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		validations();
+
+		const { email } = forgotPasswordInfo;
 
 		if (Object.keys(errors).length === 0) {
 			setFormErrors({});
@@ -27,7 +35,7 @@ const ForgotPassword = () => {
 			};
 			console.log(formData);
 
-			setEmail("");
+			setForgotPasswordInfo({ email: "" });
 			navigate(-1);
 		} else {
 			setFormErrors(errors);
@@ -43,17 +51,15 @@ const ForgotPassword = () => {
 				<input
 					id="forgot-email"
 					type="text"
-					value={email}
-					onChange={(e) => {
-						setEmail(e.target.value);
-					}}
+					value={forgotPasswordInfo.email}
+					onChange={(e) => handleChange(e)}
 					name="email"
 					placeholder="Email"
 					autoComplete="off"
 				/>
 				{formErrors.email && <span style={{ color: "red" }}>{formErrors.email}</span>}
 				<br />
-				<input type="submit" value="Send" disabled={!email} />
+				<input type="submit" value="Send" disabled={!forgotPasswordInfo.email} />
 			</form>
 		</>
 	);
