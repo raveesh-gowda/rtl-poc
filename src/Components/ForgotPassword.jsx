@@ -1,10 +1,10 @@
-import React from "react";
+import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
 import { validateEmail } from "./validate";
 
 const ForgotPassword = () => {
-	const [email, setEmail] = React.useState("");
-	const [formErrors, setFormErrors] = React.useState({});
+	const [email, setEmail] = useState("");
+	const [formErrors, setFormErrors] = useState({});
 	const errors = {};
 
 	const navigate = useNavigate();

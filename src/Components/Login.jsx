@@ -1,27 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 import { validateEmail, validatePassword } from "./validate";
 
 const Login = () => {
-	const [email, setEmail] = React.useState("");
-	const [password, setPassword] = React.useState("");
-	const [formErrors, setFormErrors] = React.useState({});
+	const [loginInfo, setLoginInfo] = useState({
+		email: "",
+		password: "",
+	});
+	const [formErrors, setFormErrors] = useState({});
 	const errors = {};
 
 	const validations = () => {
-		if (!validateEmail(email)) {
+		if (!validateEmail(loginInfo.email)) {
 			errors.email = "Invalid email format";
 		}
-		if (!validatePassword(password)) {
+		if (!validatePassword(loginInfo.password)) {
 			errors.password =
 				"Password must contain 8 or more characters with at least one of each: uppercase, lowercase, number and special";
 		}
 	};
 
+	const handleChange = (e) => {
+		const { name, value } = e.target;
+
+		setLoginInfo({ ...loginInfo, [name]: value });
+	};
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		validations();
+
+		const { email, password } = loginInfo;
 
 		if (Object.keys(errors).length === 0) {
 			setFormErrors({});
@@ -32,8 +42,7 @@ const Login = () => {
 			};
 			console.log(formData);
 
-			setEmail("");
-			setPassword("");
+			setLoginInfo({ email: "", password: "" });
 		} else {
 			setFormErrors(errors);
 		}
@@ -48,10 +57,8 @@ const Login = () => {
 				<input
 					id="login-email"
 					type="text"
-					value={email}
-					onChange={(e) => {
-						setEmail(e.target.value);
-					}}
+					value={loginInfo.email}
+					onChange={(e) => handleChange(e)}
 					name="email"
 					placeholder="Email"
 					autoComplete="off"
@@ -63,17 +70,15 @@ const Login = () => {
 				<input
 					id="login-password"
 					type="password"
-					value={password}
-					onChange={(e) => {
-						setPassword(e.target.value);
-					}}
+					value={loginInfo.password}
+					onChange={(e) => handleChange(e)}
 					name="password"
 					placeholder="Password"
 					autoComplete="off"
 				/>
 				{formErrors.password && <span style={{ color: "red" }}>{formErrors.password}</span>}
 				<br />
-				<input type="submit" value="Login" disabled={!email || !password} />
+				<input type="submit" value="Login" disabled={!loginInfo.email || !loginInfo.password} />
 			</form>
 			<div>
 				<p>Do not have an account?</p>
