@@ -52,7 +52,7 @@ const ForgotPassword = () => {
 					id="forgot-email"
 					type="text"
 					value={forgotPasswordInfo.email}
-					onChange={(e) => handleChange(e)}
+					onChange={handleChange}
 					name="email"
 					placeholder="Email"
 					autoComplete="off"

@@ -108,7 +108,7 @@ const RegisterForm = () => {
 					name="firstName"
 					placeholder="First Name"
 					autoComplete="off"
-					onChange={(e) => handleChange(e)}
+					onChange={handleChange}
 				/>
 				{formErrors.firstName && <span style={{ color: "red" }}>{formErrors.firstName}</span>}
 				<br />
@@ -121,7 +121,7 @@ const RegisterForm = () => {
 					name="lastName"
 					placeholder="Last Name"
 					autoComplete="off"
-					onChange={(e) => handleChange(e)}
+					onChange={handleChange}
 				/>
 				{formErrors.lastName && <span style={{ color: "red" }}>{formErrors.lastName}</span>}
 				<br />
@@ -134,7 +134,7 @@ const RegisterForm = () => {
 					name="address"
 					placeholder="Address"
 					autoComplete="off"
-					onChange={(e) => handleChange(e)}
+					onChange={handleChange}
 				/>
 				<br />
 				<label htmlFor="register-phone">Phone</label>
@@ -146,7 +146,7 @@ const RegisterForm = () => {
 					name="phone"
 					placeholder="Phone"
 					autoComplete="off"
-					onChange={(e) => handleChange(e)}
+					onChange={handleChange}
 				/>
 				{formErrors.phone && <span style={{ color: "red" }}>{formErrors.phone}</span>}
 				<br />
@@ -159,7 +159,7 @@ const RegisterForm = () => {
 					name="email"
 					placeholder="Email"
 					autoComplete="off"
-					onChange={(e) => handleChange(e)}
+					onChange={handleChange}
 				/>
 				{formErrors.email && <span style={{ color: "red" }}>{formErrors.email}</span>}
 				<br />
@@ -172,7 +172,7 @@ const RegisterForm = () => {
 					name="password"
 					placeholder="Password"
 					autoComplete="off"
-					onChange={(e) => handleChange(e)}
+					onChange={handleChange}
 				/>
 				{formErrors.password && <span style={{ color: "red" }}>{formErrors.password}</span>}
 				<br />
@@ -182,7 +182,7 @@ const RegisterForm = () => {
 					value={registerInfo.agree}
 					checked={registerInfo.agree}
 					name="agree"
-					onChange={(e) => handleCheckedChange(e)}
+					onChange={handleCheckedChange}
 				/>
 				<label htmlFor="agree">I Agree to terms and conditions.</label>
 				<br />

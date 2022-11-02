@@ -58,7 +58,7 @@ const Login = () => {
 					id="login-email"
 					type="text"
 					value={loginInfo.email}
-					onChange={(e) => handleChange(e)}
+					onChange={handleChange}
 					name="email"
 					placeholder="Email"
 					autoComplete="off"
@@ -71,7 +71,7 @@ const Login = () => {
 					id="login-password"
 					type="password"
 					value={loginInfo.password}
-					onChange={(e) => handleChange(e)}
+					onChange={handleChange}
 					name="password"
 					placeholder="Password"
 					autoComplete="off"
