@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
 import Greet from "./Greet";
+import User from "./User";
 
 export default class Simple extends Component {
 	constructor(props) {
@@ -44,8 +45,15 @@ export default class Simple extends Component {
 				<button onClick={() => this.increment()}>+</button>
 				<hr />
 				<Greet name="Bruce Wayne" heroName="Batman" />
-            <Greet name="Diana" heroName="Wonder Woman" />
-            <hr/>
+				<Greet name="Diana" heroName="Wonder Woman" />
+				<hr />
+				<User
+					dummyUsers={[
+						{ id: 1, name: "Max" },
+						{ id: 2, name: "Jir" },
+						{ id: 3, name: "Puk" },
+					]}
+				/>
 			</>
 		);
 	}
