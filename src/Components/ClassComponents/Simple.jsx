@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 
 import Greet from "./Greet";
+import Timer from "./Timer";
+import ToDoApp from "./ToDoApp";
 import User from "./User";
 
 export default class Simple extends Component {
@@ -54,6 +56,10 @@ export default class Simple extends Component {
 						{ id: 3, name: "Puk" },
 					]}
 				/>
+				<hr />
+				<Timer />
+				<hr />
+				<ToDoApp />
 			</>
 		);
 	}
