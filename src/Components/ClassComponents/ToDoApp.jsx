@@ -7,6 +7,7 @@ export default class TodoApp extends Component {
 		this.state = { items: [], text: "" };
 
 		this.handleChange = this.handleChange.bind(this);
+		this.handleRemove = this.handleRemove.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
@@ -32,10 +33,19 @@ export default class TodoApp extends Component {
 		}));
 	}
 
-	render() {
-		const { items = [], text = "" } = this.state;
+	handleRemove(id) {
+		this.setState((state) => ({
+			items: state.items.filter((ele) => ele.id !== id),
+		}));
+	}
 
-		const { handleChange, handleSubmit } = this;
+	render() {
+		const {
+			state: { items = [], text = "" },
+			handleChange,
+			handleSubmit,
+			handleRemove,
+		} = this;
 
 		return (
 			<div>
@@ -47,7 +57,7 @@ export default class TodoApp extends Component {
 					<br />
 					<button>Add #{items.length + 1}</button>
 				</form>
-				<TodoList items={items} />
+				<TodoList items={items} handleRemove={handleRemove} />
 			</div>
 		);
 	}
@@ -55,11 +65,18 @@ export default class TodoApp extends Component {
 
 class TodoList extends React.Component {
 	render() {
+		const { items, handleRemove } = this.props;
+
 		return (
 			<ul>
-				{this.props.items.map((item) => (
-					<li key={item.id}>{item.text}</li>
-				))}
+				{items.map((item) => {
+					const { text, id } = item;
+					return (
+						<li key={id}>
+							{text} <button onClick={() => handleRemove(id)}>X</button>
+						</li>
+					);
+				})}
 			</ul>
 		);
 	}
