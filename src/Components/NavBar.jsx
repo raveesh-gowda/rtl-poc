@@ -7,13 +7,15 @@ import ForgotPassword from "./ForgotPassword";
 import Index from "./CRUD/Index";
 import Simple from "./ClassComponents/Simple";
 import DNDContainer from "./DND/DNDContainer";
+import Example from "./useTransition/Example";
 
 const NavBar = () => {
 	return (
 		<>
 			<Link to="/">Home</Link> <Link to="/crud-example">CRUD Example</Link>{" "}
 			<Link to="/class-components">Class Components</Link>{" "}
-			<Link to="/drag-and-drop">Drag & Drop</Link>
+			<Link to="/drag-and-drop">Drag & Drop</Link>{" "}
+			<Link to="/use-transition">useTransition Hook</Link>
 			<Routes>
 				<Route path="/" element={<RegisterForm />} />
 				<Route path="/login" element={<Login />} />
@@ -21,6 +23,7 @@ const NavBar = () => {
 				<Route path="/crud-example" element={<Index />} />
 				<Route path="/class-components" element={<Simple />} />
 				<Route path="/drag-and-drop" element={<DNDContainer />} />
+				<Route path="/use-transition" element={<Example />} />
 			</Routes>
 		</>
 	);
